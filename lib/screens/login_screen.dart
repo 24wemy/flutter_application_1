@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_text_field.dart';
+import 'register_screen.dart'; // Import RegisterScreen
+import 'main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -26,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  // Hardcoded username and password for testing
+  final String _testEmail = "test@example.com";
+  final String _testPassword = "password";
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +46,14 @@ class _LoginScreenState extends State<LoginScreen>
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Function to launch GitHub URL
+  Future<void> _launchGithubURL() async {
+    final Uri url = Uri.parse('https://github.com/ogiwemy');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
@@ -195,8 +210,23 @@ class _LoginScreenState extends State<LoginScreen>
                               ),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  // Lakukan proses login di sini
-                                  print("Login berhasil!");
+                                  // Check if the entered credentials match the test credentials
+                                  if (_emailController.text == _testEmail &&
+                                      _passwordController.text == _testPassword) {
+                                    // Navigate to the main screen
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MainScreen()),
+                                    );
+                                  } else {
+                                    // Show an error message if the credentials don't match
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Invalid email or password'),
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                               child: const Text("Login",
@@ -204,8 +234,44 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to the registration screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterScreen()),
+                            );
+                          },
+                          child: Text(
+                            "Create Account",
+                            style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: 16.0,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: InkWell(
+                onTap: _launchGithubURL,
+                child: const Text(
+                  "Developed by: Ogi Wemy",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
@@ -248,7 +314,8 @@ class AnimatedBackground extends CustomPainter {
     final double maxRadius = min(size.width, size.height) / 4;
 
     for (int i = 0; i < 5; i++) {
-      double radius = maxRadius * (0.3 + i * 0.1) * (0.5 + sin(animationValue + i));
+      double radius =
+          maxRadius * (0.3 + i * 0.1) * (0.5 + sin(animationValue + i));
       double x = size.width * (0.2 + 0.6 * sin(animationValue * 2 + i));
       double y = size.height * (0.2 + 0.6 * cos(animationValue * 2 + i));
 
