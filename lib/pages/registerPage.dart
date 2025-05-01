@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_text_field.dart';
-import 'homePage.dart'; // Import MainScreen
+import 'homepage.dart'; // Import MainScreen
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

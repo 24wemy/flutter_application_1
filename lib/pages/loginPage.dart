@@ -5,8 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../widgets/custom_text_field.dart';
-import 'registerPage.dart'; 
-import 'homePage.dart';
+import 'registerpage.dart'; 
+import 'homepage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
